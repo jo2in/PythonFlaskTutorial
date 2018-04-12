@@ -1,0 +1,8 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <h1>Hi, {{ user.username }}!</h1>
+    {% for course in courses %}
+    <div><p>{{ course.title }} says: <b>{{ course.description }}</b></p></div>
+    {% endfor %}
+{% endblock %}
