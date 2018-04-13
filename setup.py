@@ -5,5 +5,9 @@ setup(
     name="HelloWorld",
     version="0.1",
     packages=find_packages('src'),
-    package_dir = {'':'src'}
+    package_dir = {'':'src'},
+    install_requires = [
+	'flask',
+	'flask-wtf'
+    ]
 )
