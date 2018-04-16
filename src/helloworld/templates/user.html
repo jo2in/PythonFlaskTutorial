@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <table>
+      <tr>
+        <td><img src="{{ user.avatar(128) }}"</td>
+        <td><h1>Hi, {{ user.username }}!</h1></td>
+      </tr>
+      <tr>
+        <td>Last seen: {{ user.last_seen }}</td>
+      </tr>
+    </table>
+    {% for subscription in subscriptions %}
+    <div><p>{{ subscription.course_id }}</b></p></div>
+    {% endfor %}
+{% endblock %}

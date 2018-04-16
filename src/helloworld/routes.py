@@ -1,11 +1,13 @@
 # Copyright
 # Brief description
 import logging
+from datetime import datetime
 from flask import render_template, flash, redirect, url_for, request
 from flask_login import current_user, login_user, logout_user, login_required
 from werkzeug.urls import url_parse
+
 from helloworld import app, db
-from helloworld.models import User
+from helloworld.models import User, Subscription
 from helloworld.forms import LoginForm, RegistrationForm
 
 
@@ -75,3 +77,18 @@ def courses():
         {'title': 'Course1', 'description': 'some other fancy stuff'}
     ]
     return render_template('courses.html', title='Courses', courses=courses)
+
+
+@app.route('/user/<username>')
+@login_required
+def user(username):
+    user = User.query.filter_by(username=username).first_or_404()
+    subscriptions = Subscription.query.filter_by(user_id=user.id).limit(5).all()
+    return render_template('user.html', user=user, subscriptions=subscriptions)
+
+
+@app.before_request
+def update_last_visit():
+    if current_user.is_authenticated:
+        current_user.last_seen = datetime.utcnow()
+        db.session.commit()
