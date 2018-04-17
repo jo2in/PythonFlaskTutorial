@@ -3,11 +3,11 @@
 {% block content %}
     <table>
       <tr>
-        <td><img src="{{ user.avatar(128) }}"</td>
-        <td><h1>Hi, {{ user.username }}!</h1></td>
+        <td><img src="{{ current_user.avatar(128) }}"</td>
+        <td><h1>Hi, {{ current_user.username }}!</h1></td>
       </tr>
       <tr>
-        <td>Last seen: {{ user.last_seen }}</td>
+        <td>Last seen: {{ current_user.last_seen }}</td>
       </tr>
     </table>
     {% for subscription in subscriptions %}

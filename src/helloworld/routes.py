@@ -84,7 +84,7 @@ def courses():
 def user(username):
     user = User.query.filter_by(username=username).first_or_404()
     subscriptions = Subscription.query.filter_by(user_id=user.id).limit(5).all()
-    return render_template('user.html', user=user, subscriptions=subscriptions)
+    return render_template('user.html', subscriptions=subscriptions)
 
 
 @app.before_request
