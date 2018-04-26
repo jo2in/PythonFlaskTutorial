@@ -7,7 +7,7 @@ from flask_login import current_user, login_user, logout_user, login_required
 from werkzeug.urls import url_parse
 
 from helloworld import app, db
-from helloworld.models import User, Subscription
+from helloworld.models import User, Course
 from helloworld.forms import LoginForm, RegistrationForm
 
 
@@ -83,8 +83,8 @@ def courses():
 @login_required
 def user(username):
     user = User.query.filter_by(username=username).first_or_404()
-    subscriptions = Subscription.query.filter_by(user_id=user.id).limit(5).all()
-    return render_template('user.html', subscriptions=subscriptions)
+    subscribed_courses = user.courses
+    return render_template('user.html', subscribed_courses=subscribed_courses)
 
 
 @app.before_request

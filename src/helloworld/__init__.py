@@ -18,7 +18,11 @@ login = LoginManager(app)
 login.login_view = 'login'
 
 if not app.debug:
-    os.mkdir('logs')
+    try:
+        os.mkdir('logs')
+    except FileExistsError:
+        pass
+
     file_handler = RotatingFileHandler('logs/helloworld.log', maxBytes=10240, backupCount=10)
     file_handler.setFormatter(logging.Formatter('%(asctime)s %(levelname)s: %(message)s [in %(pathname)s:%(lineno)d]'))
     file_handler.setLevel(logging.INFO)
