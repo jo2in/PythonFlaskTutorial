@@ -11,6 +11,14 @@ setup(
         'flask-wtf',
         'flask-sqlalchemy',
         'flask-migrate',
-        'flask-login'
+        'flask-login',
+    ],
+    setup_requires=[
+        'pytest-runner'
+    ],
+    tests_require=[
+        'pytest',
+        'pytest-cov',
+        'pytest-spec'
     ]
 )
