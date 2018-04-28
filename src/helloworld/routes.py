@@ -82,9 +82,22 @@ def courses():
 @app.route('/user/<username>')
 @login_required
 def user(username):
+    page = request.args.get('page', 1, type=int)
     user = User.query.filter_by(username=username).first_or_404()
-    subscribed_courses = user.courses
-    return render_template('user.html', subscribed_courses=subscribed_courses)
+    subscribed_courses = user.courses.paginate(page, 20, False)
+    next_url, prev_url = None, None
+
+    if subscribed_courses.has_next:
+        next_url = url_for('/user/{}'.format(username), page=subscribed_courses.next_num)
+
+    if subscribed_courses.has_prev:
+        prev_url = url_for('/user/{}'.format(username), page=subscribed_courses.prev_num)
+
+    return render_template('user.html',
+                           subscribed_courses=subscribed_courses.items,
+                           page=page,
+                           next_url=next_url,
+                           prev_url=prev_url)
 
 
 @app.before_request
