@@ -1,32 +1,44 @@
-<html>
-    <head>
-      {% if title %}
-      <title>{{ title }} - Courses</title>
-      {% else %}
-      <title>Welcome to Courses</title>
-      {% endif %}
-    </head>
-    <body>
-        <div>Courses:
-          <a href="{{ url_for('index') }}">Home</a>
-          <a href="{{ url_for('courses') }}">Courses</a>
-          {% if current_user.is_anonymous %}
-          <a href="{{ url_for('login') }}">Login</a>
-          {% else %}
-          <a href="{{ url_for('user', username=current_user.username ) }}">Profile</a>
-          <a href="{{ url_for('logout') }}">Logout</a>
-          {% endif %}
-        </div>
-        <hr>
-        {% with messages = get_flashed_messages() %}
-        {% if messages %}
-        <ul>
-            {% for message in messages %}
-            <li>{{ message }}</li>
-            {% endfor %}
-        </ul>
-        {% endif %}
-        {% endwith %}
-        {% block content %}{% endblock %}
-    </body>
-</html>
+{% extends 'bootstrap/base.html' %}
+
+{% block title %}
+ {% if title %}{{ title }} - HelloWorld{% else %}HelloWorld{% endif %}
+{% endblock %}
+
+{% block navbar %}
+<nav class="navbar navbar-default">
+  <div class="container">
+    <div class="navbar-header">
+      <a class="navbar-brand" href="{{ url_for('index') }}">HelloWorld</a>
+    </div>
+     <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+       <ul class="nav navbar-nav">
+       <li><a href="{{ url_for('index') }}">Home</a></li>
+       <li><a href="{{ url_for('courses') }}">Courses</a></li>
+       </ul>
+       <ul class="nav navbar-nav navbar-right">
+       {% if current_user.is_anonymous %}
+       <li><a href="{{ url_for('login') }}">Login</a></li>
+       {% else %}
+       <li><a href="{{ url_for('user', username=current_user.username ) }}">Profile</a></li>
+       <li><a href="{{ url_for('logout') }}">Logout</a></li>
+       {% endif %}
+       </ul>
+     </div>
+  </div>
+</nav>
+{% endblock %}
+
+{% block content %}
+<div class="container">
+  {% with messages = get_flashed_messages() %}
+  {% if messages %}
+  <ul>
+      {% for message in messages %}
+      <li>{{ message }}</li>
+      {% endfor %}
+  </ul>
+  {% endif %}
+  {% endwith %}
+  {% block app_content %}{% endblock %}
+</div>
+{% endblock %}

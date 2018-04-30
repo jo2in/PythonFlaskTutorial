@@ -13,6 +13,7 @@ setup(
         'flask-migrate',
         'flask-login',
         'flask-mail',
+        'flask-bootstrap',
         'pyjwt',
     ],
     setup_requires=[
