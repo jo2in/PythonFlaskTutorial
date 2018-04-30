@@ -12,6 +12,8 @@ setup(
         'flask-sqlalchemy',
         'flask-migrate',
         'flask-login',
+        'flask-mail',
+        'pyjwt',
     ],
     setup_requires=[
         'pytest-runner'

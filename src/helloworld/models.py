@@ -1,10 +1,13 @@
+import jwt
+from datetime import datetime, timedelta
+
 from hashlib import md5
-from datetime import datetime
+
 
 from flask_login import UserMixin
 from werkzeug.security import generate_password_hash, check_password_hash
 
-from helloworld import db
+from helloworld import app, db
 from helloworld import login
 
 
@@ -24,9 +27,24 @@ class User(UserMixin, db.Model):
     username = db.Column(db.String(64), index=True, unique=True)
     email = db.Column(db.String(128), index=True, unique=True)
     password_hash = db.Column(db.String(128))
-    last_seen = db.Column(db.DateTime, default=datetime.utcnow)
+    last_seen = db.Column(db.DateTime, default=datetime.utcnow())
     courses = db.relationship('Course', secondary=subscriptions,
                               backref=db.backref('course_participant', lazy=True), lazy='dynamic')
+
+    def get_reset_password_token(self, expires_in=600):
+        return jwt.encode(
+            {'reset_password': self.id, 'exp': datetime.now() + timedelta(seconds=expires_in)},
+            app.config['SECRET_KEY'], algorithm='HS256').decode('utf-8')
+
+    @staticmethod
+    def verify_reset_password_token(token):
+        try:
+            id = jwt.decode(token, app.config['SECRET_KEY'], algorithms=['HS256'])['reset_password']
+        except jwt.JWTError as e:
+            app.logger.error('Decoding error: {}'.format(e))
+            return
+
+        return User.query.get(id)
 
     def avatar(self, size=128):
         digest = md5(self.email.lower().encode('utf-8')).hexdigest()
